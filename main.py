@@ -1,20 +1,25 @@
-from flask_wtf import FlaskForm
-from flask import Flask, g
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from flask import Flask
 from flask import render_template
-from flask import redirect
+from flask import redirect, request
+from werkzeug.utils import secure_filename
+import json
 from forms.login import LoginForm
 from forms.user import RegisterForm
 from data import db_session
 from data.user import User
 from flask_login import LoginManager, login_user
+from flask_admin import Admin
+from forms.glavnaya import Glavnaya
+from forms.odinochnoe import OneForm
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/blogs.db")
 login_manager = LoginManager()
 login_manager.init_app(app)
+admin = Admin(app, name='microblog', template_mode='bootstrap3')
 
 
 @login_manager.user_loader
@@ -23,10 +28,39 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
+@app.route('/odinochka', methods=['GET', 'POST'])
+def zayavka_odin():
+    form = OneForm()
+    print(1)
+    if form.ochistit.data:
+        return redirect("/odinochka")
+    if form.podat.data:
+        dicti = {"Информация о пропуске": {"начало действия заявки": form.start._value(),
+                                           "конец действия заявки": form.finish._value(),
+                                           "Цель посещения": form.target.data},
+                 "Принимающая сторона": {"Подразделение": form.division.data,
+                                         "ФИО": form.FIO.data},
+                 "Информация о посетителе": {"Фамилия": form.name.data,
+                                             "Имя": form.surname.data,
+                                             "Отчество": form.patronymic.data,
+                                             "Телефон": form.phone.data,
+                                             "email": form.email.data,
+                                             "Организация": form.company.data,
+                                             "Примечание": form.note.data,
+                                             "Дата рождения": form.birthday._value(),
+                                             "Серия": form.seriya.data,
+                                             "Номер": form.number.data,
+                                             "Фото": form.photo.data}}
+        with open("json/solo_zayavki.json", "r", encoding="utf-8") as fl:
+            data = json.load(fl)
+            data["solo_zayavki"].append(dicti)
+            with open('json/solo_zayavki.json', 'w', encoding="utf-8") as cat_file:
+                json.dump(data, cat_file, ensure_ascii=False)
+    return render_template("odinochka.html", form=form)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if g.user is not None and g.user.is_authenticated():
-        return redirect('/')
     form = LoginForm()
     if form.tok_but.data:
         return redirect('/register')
@@ -35,7 +69,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect(f"/{user.email}~{user.hashed_password}")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -45,7 +79,20 @@ def login():
 @app.route('/index')
 @app.route('/', methods=['GET', 'POST'])
 def glavnaya():
-    return render_template("base.html")
+    Gl = Glavnaya()
+    if Gl.VhodSub.data:
+        return redirect("/login")
+    if Gl.RegSub.data:
+        return redirect("/register")
+    return render_template("index.html", form=Gl)
+
+
+@app.route("/<token>")
+def lichniy_kab(token):
+    k = token.split("~")
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.email == k[0]).first()
+    return render_template("lichniy.html", user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -62,13 +109,7 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
-            name=form.name.data,
             email=form.email.data,
-            surname=form.surname.data,
-            age=form.age.data,
-            position=form.position.data,
-            speciality=form.speciality.data,
-            address=form.address.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -78,4 +119,4 @@ def reqister():
 
 
 if __name__ == '__main__':
-    app.run(port=8080, host='127.0.0.1')
+    app.run(port=8080, host='0.0.0.0')
