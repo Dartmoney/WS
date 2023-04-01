@@ -2,9 +2,8 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import Session
-import sqlalchemy.ext.declarative as dec
 
-SqlAlchemyBase = dec.declarative_base()
+SqlAlchemyBase = orm.declarative_base()
 
 __factory = None
 
@@ -15,11 +14,11 @@ def global_init():
     if __factory:
         return
 
+    conn_str = ("Driver={ODBC Driver 17 for SQL Server};""Server=DESKTOP-MSI26S3\SQLEXPRESS;"
+                "Database=web_ws;""Trusted_Connection=yes")
 
-    conn_str = ("Driver={SQL Server Native Client 11.0};""Server=DESKTOP-MSI26S3\SQLEXPRESS;"
-"Database=web_ws;""Trusted_Connection=yes")
-
-    connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": conn_str})
+    connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": conn_str},
+                                )
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(connection_url, echo=False)

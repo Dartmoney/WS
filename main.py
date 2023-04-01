@@ -7,6 +7,10 @@ from forms.login import LoginForm
 from forms.user import RegisterForm
 from data import db_session
 from data.user import User
+from data.target import Target
+from data.division import Division
+from data.solo_zayavki import Solo_zayavka
+from data.informationUser import InformationUser
 from flask_login import LoginManager, login_user
 from flask_admin import Admin
 from forms.glavnaya import Glavnaya
@@ -20,6 +24,9 @@ db_session.global_init()
 login_manager = LoginManager()
 login_manager.init_app(app)
 admin = Admin(app, name='microblog', template_mode='bootstrap3')
+db_sess = db_session.create_session()
+for i in db_sess.query(Target).all():
+    print(i)
 
 
 @login_manager.user_loader
@@ -51,11 +58,8 @@ def zayavka_odin():
                                              "Серия": form.seriya.data,
                                              "Номер": form.number.data,
                                              "Фото": form.photo.data}}
-        with open("json/solo_zayavki.json", "r", encoding="utf-8") as fl:
-            data = json.load(fl)
-            data["solo_zayavki"].append(dicti)
-            with open('json/solo_zayavki.json', 'w', encoding="utf-8") as cat_file:
-                json.dump(data, cat_file, ensure_ascii=False)
+    db_sess = db_session.create_session()
+    form.target.choices = db_sess.query(Target.title)
     return render_template("odinochka.html", form=form)
 
 

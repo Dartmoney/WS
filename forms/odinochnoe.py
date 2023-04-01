@@ -6,8 +6,8 @@ import datetime
 class OneForm(FlaskForm):
     start = DateField("начало", format='%d/%m/%Y')
     finish = DateField("конец", format='%d/%m/%Y')
-    target = SelectField(choices=["Экскурсия", "По службе"])
-    division = SelectField(choices=["Боевое", "Защитное"])
+    target = SelectField()
+    division = SelectField()
     FIO = StringField(validators=[DataRequired()])
     surname = StringField(validators=[DataRequired()])
     name = StringField(validators=[DataRequired()])

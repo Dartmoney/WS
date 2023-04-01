@@ -7,6 +7,7 @@ import hashlib
 
 
 class Division(SqlAlchemyBase, UserMixin):
+    __tablename__ = "division"
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
 
