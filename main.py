@@ -16,7 +16,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-db_session.global_init("db/blogs.db")
+db_session.global_init()
 login_manager = LoginManager()
 login_manager.init_app(app)
 admin = Admin(app, name='microblog', template_mode='bootstrap3')
@@ -66,7 +66,7 @@ def login():
         return redirect('/register')
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        user = db_sess.query(User).filter(User.login == form.login.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(f"/{user.email}~{user.hashed_password}")
@@ -107,9 +107,14 @@ def reqister():
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="пользователь c takoy pochtoy уже есть")
+        if db_sess.query(User).filter(User.login == form.login.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="пользователь c takim loginom уже есть")
         user = User(
             email=form.email.data,
+            login=form.login.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
