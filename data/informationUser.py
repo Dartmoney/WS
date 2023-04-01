@@ -20,5 +20,5 @@ class InformationUser(SqlAlchemyBase, UserMixin):
     seriya = sqlalchemy.Column(sqlalchemy.Integer,index=True,unique=True,nullable=False)
     number = sqlalchemy.Column(sqlalchemy.Integer,index=True,unique=True,nullable=False)
     signID = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
-    users = orm.relationship("users")
+    users = orm.relationship("User")
 

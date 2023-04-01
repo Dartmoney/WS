@@ -26,7 +26,7 @@ login_manager.init_app(app)
 admin = Admin(app, name='microblog', template_mode='bootstrap3')
 db_sess = db_session.create_session()
 for i in db_sess.query(Target).all():
-    print(i)
+    print(i.title)
 
 
 @login_manager.user_loader

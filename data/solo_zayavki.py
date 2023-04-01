@@ -16,5 +16,5 @@ class Solo_zayavka(SqlAlchemyBase, UserMixin):
     divisionID = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("division.id"))
     FIO_pin = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
     InformationUser = orm.relationship("InformationUser")
-    target = orm.relationship("target")
-    division = orm.relationship("division")
+    target = orm.relationship("Target")
+    division = orm.relationship("Division")
