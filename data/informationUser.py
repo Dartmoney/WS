@@ -17,8 +17,7 @@ class InformationUser(SqlAlchemyBase, UserMixin):
     company = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
     note = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
     birthday = sqlalchemy.Column(sqlalchemy.DATE, index=True, unique=True, nullable=False)
-    seriya = sqlalchemy.Column(sqlalchemy.Integer,index=True,unique=True,nullable=False)
-    number = sqlalchemy.Column(sqlalchemy.Integer,index=True,unique=True,nullable=False)
+    seriya = sqlalchemy.Column(sqlalchemy.Integer, index=True, unique=True, nullable=False)
+    number = sqlalchemy.Column(sqlalchemy.Integer, index=True, unique=True, nullable=False)
     signID = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     users = orm.relationship("User")
-
