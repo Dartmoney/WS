@@ -4,9 +4,10 @@ from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 from flask_login import UserMixin
 import hashlib
+from sqlalchemy_serializer import SerializerMixin
 
 
-class InformationUser(SqlAlchemyBase, UserMixin):
+class InformationUser(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'InformationUser'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     surname = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)

@@ -18,6 +18,7 @@ from forms.odinochnoe import OneForm
 import os
 from datetime import datetime
 import flask
+import ws_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -54,8 +55,12 @@ def zayavka_odin():
                                    seriya=form.seriya.data,
                                    number=form.number.data
                                    )
+            db_sess.add(info)
+            db_sess.commit()
             zayavka = Solo_zayavka(
-                userID=flask.session["id"],
+                userID=list(map(lambda x: x[0], db_sess.query(InformationUser.id).filter(
+                    InformationUser.signID == flask.session["id"])))[
+                    0],
                 start_date=form.start._value(),
                 finish_date=form.finish._value(),
                 targetID=list(map(lambda x: x[0], db_sess.query(Target.id).filter(Target.title == form.target.data)))[
@@ -64,12 +69,57 @@ def zayavka_odin():
                 list(map(lambda x: x[0], db_sess.query(Division.id).filter(Division.title == form.division.data)))[0],
                 FIO_prin=form.FIO.data
             )
-            db_sess.add(info)
+
             db_sess.add(zayavka)
-            redirect("/lichniy")
+            db_sess.commit()
+            return redirect("/lichniy")
         form.target.choices = list(map(lambda x: x[0], db_sess.query(Target.title).all()))
         form.division.choices = list(map(lambda x: x[0], db_sess.query(Division.title).all()))
         return render_template("odinochka.html", form=form)
+
+
+@app.route('/group', methods=['GET', 'POST'])
+def group():
+    if flask.session["id"]:
+        form = OneForm()
+        print(1)
+        db_sess = db_session.create_session()
+        if form.ochistit.data:
+            return redirect("/group")
+        if form.podat.data:
+            info = InformationUser(signID=flask.session["id"],
+                                   name=form.name.data,
+                                   surname=form.surname.data,
+                                   patronymic=form.patronymic.data,
+                                   phone=form.phone.data,
+                                   email=form.email.data,
+                                   company=form.company.data,
+                                   note=form.note.data,
+                                   birthday=form.birthday._value(),
+                                   seriya=form.seriya.data,
+                                   number=form.number.data,
+                                   team=form.team.data)
+            db_sess.add(info)
+            db_sess.commit()
+            zayavka = Solo_zayavka(
+                userID=list(map(lambda x: x[0], db_sess.query(InformationUser.id).filter(
+                    InformationUser.signID == flask.session["id"])))[
+                    0],
+                start_date=form.start._value(),
+                finish_date=form.finish._value(),
+                targetID=list(map(lambda x: x[0], db_sess.query(Target.id).filter(Target.title == form.target.data)))[
+                    0],
+                divisionID=
+                list(map(lambda x: x[0], db_sess.query(Division.id).filter(Division.title == form.division.data)))[0],
+                FIO_prin=form.FIO.data
+            )
+
+            db_sess.add(zayavka)
+            db_sess.commit()
+            return redirect("/lichniy")
+        form.target.choices = list(map(lambda x: x[0], db_sess.query(Target.title).all()))
+        form.division.choices = list(map(lambda x: x[0], db_sess.query(Division.title).all()))
+        return render_template("group.html", form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -138,4 +188,5 @@ def reqister():
 
 
 if __name__ == '__main__':
+    app.register_blueprint(ws_api.blueprint)
     app.run(port=8080, host='0.0.0.0')

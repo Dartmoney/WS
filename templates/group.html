@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <h1>Информация для пропуска</h1>
+    <p>
+    <h5>Срок действия заявки</h5>
+    {{ form.start.label }}
+    {{ form.start(class="form-control") }}
+    {% for error in form.start.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    {{ form.finish.label }}
+    {{ form.finish(class="form-control") }}
+    {% for error in form.finish.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+    <h5>Цель посещения</h5>
+    {{ form.target(class="form-control") }}
+    {% for error in form.target.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+    <h1>Принимающая сторона</h1>
+    <h5>Подразделение</h5>
+    {{ form.division(class="form-control") }}
+    {% for error in form.division.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>ФИО</h5>
+    {{ form.FIO(class="form-control") }}
+    {% for error in form.FIO.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+    <h1>Информация о посетителе</h1>
+    <h5>Фамилия</h5>
+    {{ form.surname(class="form-control") }}
+    {% for error in form.surname.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Имя</h5>
+    {{ form.name(class="form-control") }}
+    {% for error in form.name.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Отчество</h5>
+    {{ form.patronymic(class="form-control") }}
+    {% for error in form.patronymic.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Номер телефона</h5>
+    {{ form.phone(class="form-control") }}
+    {% for error in form.phone.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>E-mail</h5>
+    {{ form.email(class="form-control") }}
+    {% for error in form.email.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Организация</h5>
+    {{ form.company(class="form-control") }}
+    {% for error in form.company.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Примечание</h5>
+    {{ form.note(class="form-control") }}
+    {% for error in form.company.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Дата рождения</h5>
+    {{ form.birthday(class="form-control") }}
+    {% for error in form.birthday.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Серия паспорта</h5>
+    {{ form.seriya(class="form-control") }}
+    {% for error in form.seriya.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ class }}
+    </div>
+    {% endfor %}
+    <h5>Номер паспорта</h5>
+    {{ form.number(class="form-control") }}
+    {% for error in form.number.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Команда</h5>
+    {{ form.team(class="form-control") }}
+    {% for error in form.team.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    <h5>Фото</h5>
+    <p>
+        {{ form.photo(class="form-control") }}
+        {% for error in form.photo.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>{{ form.podat(type="submit", class="btn btn-primary") }} {{ form.ochistit(type="submit", class="btn btn-primary")
+        }}</p>
+</form>
+{% endblock %}

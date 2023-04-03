@@ -19,6 +19,7 @@ class OneForm(FlaskForm):
     birthday = DateField(format='%d/%m/%Y')
     seriya = StringField(validators=[DataRequired()])
     number = StringField(validators=[DataRequired()])
+    team = StringField(validators=[DataRequired()])
     photo = FileField()
     docs = FileField()
     podat = SubmitField("офоромить заявку")
