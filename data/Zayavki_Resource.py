@@ -26,6 +26,15 @@ class Zayavka_Resource(Resource):
         session.delete(zayavka)
         session.commit()
 
+    def put(self, zayavka_id):
+        abort_if_zayavka_not_found(zayavka_id)
+        session = db_session.create_session()
+        zayavka = session.query(Solo_zayavka).get(zayavka_id)
+        zayavka.odobrena = True
+        session.add(zayavka)
+        session.commit()
+        return jsonify({'zayavka': zayavka.to_dict()})
+
 
 parser = reqparse.RequestParser()
 parser.add_argument('title', required=True)

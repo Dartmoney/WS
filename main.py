@@ -194,7 +194,6 @@ if __name__ == '__main__':
     app.register_blueprint(ws_api.blueprint)
     # для списка объектов
     api.add_resource(Zayavka_list_Resource, '/api/v2/zayavki')
-
     # для одного объекта
     api.add_resource(Zayavka_Resource, '/api/v2/news/<int:zayavka_id>')
     app.run(port=8080, host='0.0.0.0')
