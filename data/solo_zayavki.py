@@ -17,6 +17,7 @@ class Solo_zayavka(SqlAlchemyBase, UserMixin, SerializerMixin):
     divisionID = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("division.id"))
     FIO_prin = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
     team = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
+    odobrena = sqlalchemy.Column(sqlalchemy.BOOLEAN, index=True, unique=True, nullable=False)
     InformationUser = orm.relationship("InformationUser")
     target = orm.relationship("Target")
     division = orm.relationship("Division")
