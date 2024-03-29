@@ -1,3 +1,4 @@
-# WS
-Сайт с апи регистрация плюс авторизация со связью с sql server
-Апи имеет get put запросы как для всех так и для одиночных заявок
+# a project created for World Skills
+Website with api registration plus authorization with connection to sql server
+Api has get put requests for both all and single requests
+there are no comments, as I did it even before I got into the habit of writing comments on the code
